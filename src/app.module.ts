@@ -1,10 +1,19 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { EnvironmentConfigModule } from './infraestructure/config/environment-config/enviroment-config.module';
+import { TypeOrmConfigModule } from './infraestructure/config/typeorm/getTypeORM.module';
+import { UsuarioModule } from './app/module/usuario.module';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    ConfigModule.forRoot({
+      envFilePath: '.env',
+      isGlobal: true,
+    }),
+    EnvironmentConfigModule,
+    TypeOrmConfigModule,
+    UsuarioModule,
+  ],
 })
 export class AppModule {}
+
