@@ -1,7 +1,8 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { TestResultadoEntity } from "./test-resultado.entity.schema";
 
 @Entity('tests')
-export class Test{
+export class TestEntity{
 
     @PrimaryGeneratedColumn()
     id_Test: number;
@@ -14,4 +15,7 @@ export class Test{
 
     @Column({type: 'timestamp', default: () => 'CURRENT_TIMESTAMP'})
     test_FechaCreacion: Date;
+
+    @ManyToMany(() => TestResultadoEntity, TestResultado => TestResultado.test)
+    testResultados: TestResultadoEntity[];
 }

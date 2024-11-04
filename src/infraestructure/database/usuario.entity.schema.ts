@@ -1,6 +1,8 @@
 import { SexoEnum } from "src/shared/enums/sexo.enum";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { ProgresoUsuarioEntity } from "./progreso-usuario.entity.schema";
+import { TestResultadoEntity } from "./test-resultado.entity.schema";
+import { RecomendacionUsuarioEntity } from "./recomendacion-usuario.entity.schema";
 
 @Entity('usuario')
 export class UsuarioEntity{
@@ -30,4 +32,10 @@ export class UsuarioEntity{
 
     @OneToMany(() => ProgresoUsuarioEntity, progreso => progreso.usuario)
     progresos: ProgresoUsuarioEntity[];
+
+    @OneToMany(() => TestResultadoEntity, testResultado => testResultado.usuario)
+    testResultados: TestResultadoEntity[];
+
+    @OneToMany(() => RecomendacionUsuarioEntity, recomendacionUsuario => recomendacionUsuario.usuario)
+    recomendaciones: RecomendacionUsuarioEntity[];
 }
