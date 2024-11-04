@@ -6,6 +6,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { Repository } from 'typeorm';
 import { UsuarioEntity } from "../database/usuario.entity.schema";
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsuarioRepositoryImpl implements UsuarioRepository {
@@ -22,6 +23,7 @@ export class UsuarioRepositoryImpl implements UsuarioRepository {
         if (usuarioExistente) {
             throw new HttpException('El correo ya está en uso', HttpStatus.BAD_REQUEST);
         }
+        usuario.usuario_Password = await bcrypt.hash(usuario.usuario_Password, 10);
     
         try {
             const nuevoUsuario = this.usuarioRepository.create(usuario);
@@ -39,8 +41,8 @@ export class UsuarioRepositoryImpl implements UsuarioRepository {
         return usuario;
     }
     
-    async obtenerUsuarioPorUsuario(usuarioUsuario: string): Promise<Usuario | null> {
-        const usuario = await this.usuarioRepository.findOne({ where: { usuario_Nombre: usuarioUsuario } });
+    async obtenerUsuarioPorCorreo(usuarioCorreo: string): Promise<Usuario | null> {
+        const usuario = await this.usuarioRepository.findOne({ where: { usuario_Correo: usuarioCorreo } });
         if (!usuario) {
             throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);
         }

@@ -23,9 +23,9 @@ export class UsuarioController {
         return this.usuarioUseCase.obtenerUsuarioPorID(id_Usuario);
     }
 
-    @Get('/obtenerPorUsuario/:usuario_Usuario')
-    async obtenerUsuarioPorUsuario(@Param('usuario_Usuario') usuario: string) {
-        return this.usuarioUseCase.obtenerUsuarioPorUsuario(usuario);
+    @Get('/obtenerPorCorreo/:usuario_Correo')
+    async obtenerUsuarioPorCorreo(@Param('usuario_Correo') usuario: string) {
+        return this.usuarioUseCase.obtenerUsuarioPorCorreo(usuario);
     }
 
     @Patch(':id_Usuario')
