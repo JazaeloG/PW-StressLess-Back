@@ -22,8 +22,8 @@ export class UsuarioUseCase {
         return this.usuarioRepository.obtenerUsuarioPorID(usuarioID);
     }
 
-    async obtenerUsuarioPorUsuario(usuarioUsuario: string): Promise<Usuario | null> {
-        return this.usuarioRepository.obtenerUsuarioPorUsuario(usuarioUsuario);
+    async obtenerUsuarioPorCorreo(usuarioCorreo: string): Promise<Usuario | null> {
+        return this.usuarioRepository.obtenerUsuarioPorCorreo(usuarioCorreo);
     }
 
     async obtenerUsuarios(): Promise<Usuario[]> {

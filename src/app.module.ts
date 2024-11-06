@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { EnvironmentConfigModule } from './infraestructure/config/environment-config/enviroment-config.module';
 import { TypeOrmConfigModule } from './infraestructure/config/typeorm/getTypeORM.module';
 import { UsuarioModule } from './app/module/usuario.module';
+import { AuthModule } from './app/module/auth.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { UsuarioModule } from './app/module/usuario.module';
     EnvironmentConfigModule,
     TypeOrmConfigModule,
     UsuarioModule,
+    AuthModule
   ],
 })
 export class AppModule {}

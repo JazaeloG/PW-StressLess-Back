@@ -6,6 +6,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { Repository } from 'typeorm';
 import { UsuarioEntity } from "../database/usuario.entity.schema";
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsuarioRepositoryImpl implements UsuarioRepository {
@@ -23,13 +24,17 @@ export class UsuarioRepositoryImpl implements UsuarioRepository {
             throw new HttpException('El correo ya está en uso', HttpStatus.BAD_REQUEST);
         }
     
+        usuario.usuario_Password = await bcrypt.hash(usuario.usuario_Password, 10);
+    
         try {
             const nuevoUsuario = this.usuarioRepository.create(usuario);
             return await this.usuarioRepository.save(nuevoUsuario);
         } catch (error) {
+            console.error('Error al guardar el nuevo usuario:', error);
             throw new HttpException('Error al crear el usuario', HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    
     
     async obtenerUsuarioPorID(usuarioID: number): Promise<Usuario | null> {
         const usuario = await this.usuarioRepository.findOne({ where: { id_Usuario: usuarioID } });
@@ -39,13 +44,11 @@ export class UsuarioRepositoryImpl implements UsuarioRepository {
         return usuario;
     }
     
-    async obtenerUsuarioPorUsuario(usuarioUsuario: string): Promise<Usuario | null> {
-        const usuario = await this.usuarioRepository.findOne({ where: { usuario_Nombre: usuarioUsuario } });
-        if (!usuario) {
-            throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);
-        }
-        return usuario;
+    async obtenerUsuarioPorCorreo(usuarioCorreo: string): Promise<Usuario | null> {
+        const usuario = await this.usuarioRepository.findOne({ where: { usuario_Correo: usuarioCorreo } });
+        return usuario || null;
     }
+    
     
     async obtenerUsuarios(): Promise<Usuario[]> {
         return await this.usuarioRepository.find();

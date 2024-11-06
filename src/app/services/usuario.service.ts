@@ -19,8 +19,8 @@ export class UsuarioService {
         return this.usuarioUseCase.obtenerUsuarioPorID(id_Usuario);
     }
 
-    async obtenerUsuarioPorUsuario(usuarioUsuario: string) {
-        return this.usuarioUseCase.obtenerUsuarioPorUsuario(usuarioUsuario);
+    async obtenerUsuarioPorCorreo(usuarioCorreo: string) {
+        return this.usuarioUseCase.obtenerUsuarioPorCorreo(usuarioCorreo);
     }
 
     async actualizarUsuario(id_Usuario: number, usuario) {
