@@ -23,15 +23,18 @@ export class UsuarioRepositoryImpl implements UsuarioRepository {
         if (usuarioExistente) {
             throw new HttpException('El correo ya está en uso', HttpStatus.BAD_REQUEST);
         }
+    
         usuario.usuario_Password = await bcrypt.hash(usuario.usuario_Password, 10);
     
         try {
             const nuevoUsuario = this.usuarioRepository.create(usuario);
             return await this.usuarioRepository.save(nuevoUsuario);
         } catch (error) {
+            console.error('Error al guardar el nuevo usuario:', error);
             throw new HttpException('Error al crear el usuario', HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    
     
     async obtenerUsuarioPorID(usuarioID: number): Promise<Usuario | null> {
         const usuario = await this.usuarioRepository.findOne({ where: { id_Usuario: usuarioID } });
@@ -43,11 +46,9 @@ export class UsuarioRepositoryImpl implements UsuarioRepository {
     
     async obtenerUsuarioPorCorreo(usuarioCorreo: string): Promise<Usuario | null> {
         const usuario = await this.usuarioRepository.findOne({ where: { usuario_Correo: usuarioCorreo } });
-        if (!usuario) {
-            throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);
-        }
-        return usuario;
+        return usuario || null;
     }
+    
     
     async obtenerUsuarios(): Promise<Usuario[]> {
         return await this.usuarioRepository.find();

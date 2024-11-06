@@ -8,7 +8,7 @@ export class CrearUsuarioDto {
     @IsString({ message: MensajesSistema.CAMPO_STRING })
     @IsNotEmpty({ message: MensajesSistema.CAMPO_VACIO })
     @MaxLength(50, { message: MensajesSistema.CAMPO_LIMITE_MAXIMO })
-    usuario_Usuario: string;
+    usuario_Nombre: string;
 
     @IsString({ message: MensajesSistema.CAMPO_STRING })
     @IsNotEmpty({ message: MensajesSistema.CAMPO_VACIO })

@@ -14,15 +14,15 @@ export class AuthRepositoryImpl implements AuthRepository{
     ) { }
 
     async registrarUsuario(usuario: CrearUsuarioDto): Promise<any> {
-        const usuarioExistente = this.usuarioUseCase.obtenerUsuarioPorCorreo(usuario.usuario_Correo);
+        const usuarioExistente = await this.usuarioUseCase.obtenerUsuarioPorCorreo(usuario.usuario_Correo);
         if (usuarioExistente) {
-            throw new Error('El correo ya está en uso');
+            throw new HttpException('El correo ya está en uso', HttpStatus.BAD_REQUEST);
         }
         try {
-            const nuevoUsuario = this.usuarioUseCase.crearUsuario(usuario);
+            const nuevoUsuario = await this.usuarioUseCase.crearUsuario(usuario);
             return nuevoUsuario;
         } catch (error) {
-            throw new Error('Error al crear el usuario');
+            throw new HttpException(error , HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     
@@ -39,7 +39,7 @@ export class AuthRepositoryImpl implements AuthRepository{
             throw new HttpException('Contraseña incorrecta', HttpStatus.UNAUTHORIZED);
         }
         
-        const payload = { usuario_Correo: usuario.usuario_Correo, sub: usuarioEncontrado.id_Usuario };
+        const payload = { correo: usuario.usuario_Correo, id: usuarioEncontrado.id_Usuario };
         const token = this.jwtService.sign(payload);
         
         return {
