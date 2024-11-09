@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Preguntas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding" fullscreen>
+  <div class="container">
+    <div class="question-box">
+      <div *ngFor="let question of questions">
+        <p>{{ question.id }}. {{ question.text }}</p>
+        
+        <ion-radio-group [(ngModel)]="answers[question.id]">
+          <!-- Genera dinámicamente las opciones para cada pregunta -->
+          <ion-item *ngFor="let option of question.options" lines="none">
+            <ion-label>{{ option }}</ion-label>
+            <ion-radio slot="start" [value]="option"></ion-radio>
+          </ion-item>
+        </ion-radio-group>
+      </div>
+
+      <ion-button expand="block" class="next-button" (click)="goToResults()">Siguiente</ion-button>
+    </div>
+  </div>
+</ion-content>

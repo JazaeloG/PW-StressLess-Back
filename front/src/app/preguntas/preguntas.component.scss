@@ -1,0 +1,56 @@
+ion-content {
+  --background: #0047ab; /* Fondo azul */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.question-box {
+  background-color: #c4c4c4; /* Fondo gris */
+  padding: 20px;
+  border-radius: 12px;
+  width: 80%; /* Aumenta el ancho al 80% sin límite máximo */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+p {
+  font-weight: bold;
+  color: #333;
+}
+
+ion-item {
+  --background: transparent; /* Elimina el fondo */
+  --border-style: none; /* Elimina la línea inferior */
+  margin-bottom: 8px;
+}
+
+ion-radio-group {
+  ion-item {
+    ion-radio {
+      --background: #d3d3d3; /* Fondo gris cuando no está seleccionado */
+      --checked-background: #000; /* Fondo negro cuando está seleccionado */
+      --checked-icon: #fff; /* Color blanco para el ícono de selección */
+      --border-color: #999; /* Color del borde */
+      --border-width: 2px; /* Ancho del borde */
+    }
+
+    ion-label {
+      color: #000 !important; /* Color negro para el texto de las opciones */
+    }
+  }
+}
+
+  
+
+.next-button {
+  margin-top: 20px;
+  font-size: 14px;
+  width: 150px; /* Botón más pequeño */
+  align-self: center;
+}
