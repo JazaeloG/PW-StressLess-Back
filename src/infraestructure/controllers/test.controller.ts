@@ -1,33 +1,34 @@
-import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Patch, Delete } from '@nestjs/common';
 import { TestService } from '../../app/services/test.service';
-import { TestEntity } from '../../infraestructure/database/test.entity.schema';
+import { CrearTestDto } from 'src/app/dtos/test/crear-test.dto';
+import { ActualizarTestDto } from 'src/app/dtos/test/actualizar-test.dto';
 
 @Controller('test')
 export class TestController {
   constructor(private readonly testService: TestService) {}
 
   @Post()
-  create(@Body() test: TestEntity): Promise<TestEntity> {
-    return this.testService.create(test);
+  async crearTest(@Body() test: CrearTestDto) {
+    return this.testService.crearTest(test);
   }
 
   @Get()
-  findAll(): Promise<TestEntity[]> {
-    return this.testService.findAll();
+  async obtenerTests() {
+    return this.testService.obtenerTests();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: number): Promise<TestEntity> {
-    return this.testService.findOne(id);
+  @Get('/:id')
+  async obtenerTestPorID(@Param('id') id: number) {
+    return this.testService.obtenerTestPorID(id);
   }
 
-  @Put(':id')
-  update(@Param('id') id: number, @Body() test: TestEntity): Promise<void> {
-    return this.testService.update(id, test);
+  @Patch('/:id')
+  async actualizarTest(@Param('id') id: number, @Body() test: ActualizarTestDto) {
+    return this.testService.actualizarTest(id, test);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: number): Promise<void> {
-    return this.testService.remove(id);
+  @Delete('/:id')
+  async eliminarTest(@Param('id') id: number) {
+    return this.testService.eliminarTest(id);
   }
 }

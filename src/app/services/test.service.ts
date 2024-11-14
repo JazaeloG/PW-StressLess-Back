@@ -1,32 +1,30 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { TestRepository } from '../../infraestructure/repositories/test.repository';
-import { TestEntity } from '../../infraestructure/database/test.entity.schema';
+import { Injectable } from "@nestjs/common";
+import { TestUseCase } from "src/core/use-cases/test.use-case";
+import { TestInterface } from "src/shared/interfaces/test.interface";
 
 @Injectable()
 export class TestService {
-  constructor(
-    @InjectRepository(TestRepository)
-    private readonly testRepository: TestRepository,
-  ) {}
 
-  async create(test: TestEntity): Promise<TestEntity> {
-    return this.testRepository.save(test);
-  }
+    constructor(private readonly testUseCase: TestUseCase) {}
 
-  async findAll(): Promise<TestEntity[]> {
-    return this.testRepository.find();
-  }
+    async crearTest(test) {
+        return this.testUseCase.crearTest(test);
+    }
 
-  async findOne(id: number): Promise<TestEntity> {
-    return this.testRepository.findOne({ where: { id_Test: id } });
-  }
+    async obtenerTests() {
+        return this.testUseCase.obtenerTests();
+    }
 
-  async update(id: number, test: TestEntity): Promise<void> {
-    await this.testRepository.update(id, test);
-  }
+    async obtenerTestPorID(id_Test: number) {
+        return this.testUseCase.obtenerTestPorID(id_Test);
+    }
 
-  async remove(id: number): Promise<void> {
-    await this.testRepository.delete(id);
-  }
+    async actualizarTest(id_Test: number, test) {
+        return this.testUseCase.actualizarTest(id_Test, test);
+    }
+
+    async eliminarTest(id_Test: number) {
+        return this.testUseCase.eliminarTest(id_Test);
+    }
+
 }

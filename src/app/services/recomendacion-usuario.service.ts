@@ -1,32 +1,30 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { RecomendacionUsuarioRepository } from '../../infraestructure/repositories/recomendacion-usuario.repository';
-import { RecomendacionUsuarioEntity } from '../../infraestructure/database/recomendacion-usuario.entity.schema';
+import { Injectable } from "@nestjs/common";
+import { RecomendacionUsuarioUseCase } from "src/core/use-cases/recomendacion-usuario.use-case";
+import { RecomendacionUsuarioInterface } from "src/shared/interfaces/recomendacion-usuario.interface";
 
 @Injectable()
 export class RecomendacionUsuarioService {
-  constructor(
-    @InjectRepository(RecomendacionUsuarioRepository)
-    private readonly recomendacionUsuarioRepository: RecomendacionUsuarioRepository,
-  ) {}
 
-  async create(recomendacionUsuario: RecomendacionUsuarioEntity): Promise<RecomendacionUsuarioEntity> {
-    return this.recomendacionUsuarioRepository.save(recomendacionUsuario);
-  }
+    constructor(private readonly recomendacionUsuarioUseCase: RecomendacionUsuarioUseCase) {}
 
-  async findAll(): Promise<RecomendacionUsuarioEntity[]> {
-    return this.recomendacionUsuarioRepository.find();
-  }
+    async crearRecomendacionUsuario(recomendacionUsuario) {
+        return this.recomendacionUsuarioUseCase.crearRecomendacionUsuario(recomendacionUsuario);
+    }
 
-  async findOne(id: number): Promise<RecomendacionUsuarioEntity> {
-    return this.recomendacionUsuarioRepository.findOne({ where: { id_RecomendacionUsuario: id } });
-  }
+    async obtenerRecomendacionUsuarios() {
+        return this.recomendacionUsuarioUseCase.obtenerRecomendacionUsuarios();
+    }
 
-  async update(id: number, recomendacionUsuario: RecomendacionUsuarioEntity): Promise<void> {
-    await this.recomendacionUsuarioRepository.update(id, recomendacionUsuario);
-  }
+    async obtenerRecomendacionUsuarioPorID(id_RecomendacionUsuario: number) {
+        return this.recomendacionUsuarioUseCase.obtenerRecomendacionUsuarioPorID(id_RecomendacionUsuario);
+    }
 
-  async remove(id: number): Promise<void> {
-    await this.recomendacionUsuarioRepository.delete(id);
-  }
+    async actualizarRecomendacionUsuario(id_RecomendacionUsuario: number, recomendacionUsuario) {
+        return this.recomendacionUsuarioUseCase.actualizarRecomendacionUsuario(id_RecomendacionUsuario, recomendacionUsuario);
+    }
+
+    async eliminarRecomendacionUsuario(id_RecomendacionUsuario: number) {
+        return this.recomendacionUsuarioUseCase.eliminarRecomendacionUsuario(id_RecomendacionUsuario);
+    }
+
 }

@@ -1,32 +1,30 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { ProgresoUsuarioRepository } from '../../infraestructure/repositories/progreso-usuario.repository';
-import { ProgresoUsuarioEntity } from '../../infraestructure/database/progreso-usuario.entity.schema';
+import { Injectable } from "@nestjs/common";
+import { ProgresoUsuarioUseCase } from "src/core/use-cases/progreso-usuario.use-case";
+import { ProgresoUsuarioInterface } from "src/shared/interfaces/progreso-usuario.interface";
 
 @Injectable()
 export class ProgresoUsuarioService {
-  constructor(
-    @InjectRepository(ProgresoUsuarioRepository)
-    private readonly progresoUsuarioRepository: ProgresoUsuarioRepository,
-  ) {}
 
-  async create(progresoUsuario: ProgresoUsuarioEntity): Promise<ProgresoUsuarioEntity> {
-    return this.progresoUsuarioRepository.save(progresoUsuario);
-  }
+    constructor(private readonly progresoUsuarioUseCase: ProgresoUsuarioUseCase) {}
 
-  async findAll(): Promise<ProgresoUsuarioEntity[]> {
-    return this.progresoUsuarioRepository.find();
-  }
+    async crearProgresoUsuario(progresoUsuario) {
+        return this.progresoUsuarioUseCase.crearProgresoUsuario(progresoUsuario);
+    }
 
-  async findOne(id: number): Promise<ProgresoUsuarioEntity> {
-    return this.progresoUsuarioRepository.findOne({ where: { id_ProgresoUsuario: id } });
-  }
+    async obtenerProgresoUsuarios() {
+        return this.progresoUsuarioUseCase.obtenerProgresoUsuarios();
+    }
 
-  async update(id: number, progresoUsuario: ProgresoUsuarioEntity): Promise<void> {
-    await this.progresoUsuarioRepository.update(id, progresoUsuario);
-  }
+    async obtenerProgresoUsuarioPorID(id_ProgresoUsuario: number) {
+        return this.progresoUsuarioUseCase.obtenerProgresoUsuarioPorID(id_ProgresoUsuario);
+    }
 
-  async remove(id: number): Promise<void> {
-    await this.progresoUsuarioRepository.delete(id);
-  }
+    async actualizarProgresoUsuario(id_ProgresoUsuario: number, progresoUsuario) {
+        return this.progresoUsuarioUseCase.actualizarProgresoUsuario(id_ProgresoUsuario, progresoUsuario);
+    }
+
+    async eliminarProgresoUsuario(id_ProgresoUsuario: number) {
+        return this.progresoUsuarioUseCase.eliminarProgresoUsuario(id_ProgresoUsuario);
+    }
+
 }

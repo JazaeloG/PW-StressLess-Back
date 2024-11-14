@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RecomendacionController } from 'src/infraestructure/controllers/recomendacion.controller';
 import { RecomendacionService } from 'src/app/services/recomendacion.service';
-import { RecomendacionRepository } from 'src/infraestructure/repositories/recomendacion.repository';
+import { RecomendacionRepositoryImpl } from 'src/infraestructure/repositories/recomendacion.repository';
 import { RecomendacionEntity } from 'src/infraestructure/database/recomendacion.entity.schema';
 
 @Module({
@@ -12,7 +12,7 @@ import { RecomendacionEntity } from 'src/infraestructure/database/recomendacion.
     RecomendacionService,
     {
       provide: 'RecomendacionRepository',
-      useClass: RecomendacionRepository,
+      useClass: RecomendacionRepositoryImpl,
     },
   ],
   exports: [RecomendacionService],

@@ -1,32 +1,30 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { RecomendacionRepository } from '../../infraestructure/repositories/recomendacion.repository';
-import { RecomendacionEntity } from '../../infraestructure/database/recomendacion.entity.schema';
+import { Injectable } from "@nestjs/common";
+import { RecomendacionUseCase } from "src/core/use-cases/recomendacion.use-case";
+import { RecomendacionInterface } from "src/shared/interfaces/recomendacion.interface";
 
 @Injectable()
 export class RecomendacionService {
-  constructor(
-    @InjectRepository(RecomendacionRepository)
-    private readonly recomendacionRepository: RecomendacionRepository,
-  ) {}
 
-  async create(recomendacion: RecomendacionEntity): Promise<RecomendacionEntity> {
-    return this.recomendacionRepository.save(recomendacion);
-  }
+    constructor(private readonly recomendacionUseCase: RecomendacionUseCase) {}
 
-  async findAll(): Promise<RecomendacionEntity[]> {
-    return this.recomendacionRepository.find();
-  }
+    async crearRecomendacion(recomendacion) {
+        return this.recomendacionUseCase.crearRecomendacion(recomendacion);
+    }
 
-  async findOne(id: number): Promise<RecomendacionEntity> {
-    return this.recomendacionRepository.findOne({ where: { id_Recomendacion: id } });
-  }
+    async obtenerRecomendaciones() {
+        return this.recomendacionUseCase.obtenerRecomendaciones();
+    }
 
-  async update(id: number, recomendacion: RecomendacionEntity): Promise<void> {
-    await this.recomendacionRepository.update(id, recomendacion);
-  }
+    async obtenerRecomendacionPorID(id_Recomendacion: number) {
+        return this.recomendacionUseCase.obtenerRecomendacionPorID(id_Recomendacion);
+    }
 
-  async remove(id: number): Promise<void> {
-    await this.recomendacionRepository.delete(id);
-  }
+    async actualizarRecomendacion(id_Recomendacion: number, recomendacion) {
+        return this.recomendacionUseCase.actualizarRecomendacion(id_Recomendacion, recomendacion);
+    }
+
+    async eliminarRecomendacion(id_Recomendacion: number) {
+        return this.recomendacionUseCase.eliminarRecomendacion(id_Recomendacion);
+    }
+
 }

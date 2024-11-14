@@ -1,33 +1,34 @@
-import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
+import { Controller, Post, Body, Get, Delete, Param, Patch } from '@nestjs/common';
 import { TestResultadoService } from '../../app/services/test-resultado.service';
-import { TestResultadoEntity } from '../../infraestructure/database/test-resultado.entity.schema';
+import { CrearTestResultadoDto } from 'src/app/dtos/test-resultado/crear-test-resultado.dto';
+import { ActualizarTestResultadoDto } from 'src/app/dtos/test-resultado/actualizar-test-resultado.dto';
 
 @Controller('test-resultado')
 export class TestResultadoController {
   constructor(private readonly testResultadoService: TestResultadoService) {}
 
   @Post()
-  create(@Body() testResultado: TestResultadoEntity): Promise<TestResultadoEntity> {
-    return this.testResultadoService.create(testResultado);
+  async crearTestResultado(@Body() testResultado: CrearTestResultadoDto) {
+    return this.testResultadoService.crearTestResultado(testResultado);
   }
 
   @Get()
-  findAll(): Promise<TestResultadoEntity[]> {
-    return this.testResultadoService.findAll();
+  async obtenerTestResultados() {
+    return this.testResultadoService.obtenerTestResultados();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: number): Promise<TestResultadoEntity> {
-    return this.testResultadoService.findOne(id);
+  @Get('/:id')
+  async obtenerTestResultadoPorID(@Param('id') id: number) {
+    return this.testResultadoService.obtenerTestResultadoPorID(id);
   }
 
-  @Put(':id')
-  update(@Param('id') id: number, @Body() testResultado: TestResultadoEntity): Promise<void> {
-    return this.testResultadoService.update(id, testResultado);
+  @Patch('/:id')
+  async actualizarTestResultado(@Param('id') id: number, @Body() testResultado: ActualizarTestResultadoDto) {
+    return this.testResultadoService.actualizarTestResultado(id, testResultado);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: number): Promise<void> {
-    return this.testResultadoService.remove(id);
+  @Delete('/:id')
+  async eliminarTestResultado(@Param('id') id: number) {
+    return this.testResultadoService.eliminarTestResultado(id);
   }
 }

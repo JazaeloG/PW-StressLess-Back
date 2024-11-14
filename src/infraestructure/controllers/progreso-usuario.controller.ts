@@ -1,33 +1,35 @@
-import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
-import { ProgresoUsuarioService } from '../../app/services/progreso-usuario.service';
-import { ProgresoUsuarioEntity } from '../database/progreso-usuario.entity.schema';
+import { Controller, Post, Body, Get, Delete, Param, Patch } from "@nestjs/common";
+import { ProgresoUsuarioUseCase } from "src/core/use-cases/progreso-usuario.use-case";
+import { CrearProgresoUsuarioDto } from "src/app/dtos/progreso/crear-progreso.dto";
+import { ActualizarProgresoUsuarioDto } from "src/app/dtos/progreso/actualizar-progreso.dto";
 
 @Controller('progreso-usuario')
 export class ProgresoUsuarioController {
-  constructor(private readonly progresoUsuarioService: ProgresoUsuarioService) {}
+    
+    constructor(private readonly progresoUsuarioUseCase: ProgresoUsuarioUseCase) {}
 
-  @Post()
-  create(@Body() progresoUsuario: ProgresoUsuarioEntity): Promise<ProgresoUsuarioEntity> {
-    return this.progresoUsuarioService.create(progresoUsuario);
-  }
+    @Post()
+    async crearProgresoUsuario(@Body() progresoUsuario: CrearProgresoUsuarioDto) {
+        return this.progresoUsuarioUseCase.crearProgresoUsuario(progresoUsuario);
+    }
 
-  @Get()
-  findAll(): Promise<ProgresoUsuarioEntity[]> {
-    return this.progresoUsuarioService.findAll();
-  }
+    @Get()
+    async obtenerProgresosUsuario() {
+        return this.progresoUsuarioUseCase.obtenerProgresoUsuarios();
+    }
 
-  @Get(':id')
-  findOne(@Param('id') id: number): Promise<ProgresoUsuarioEntity> {
-    return this.progresoUsuarioService.findOne(id);
-  }
+    @Get('/:id_ProgresoUsuario')
+    async obtenerProgresoUsuarioPorID(@Param('id_ProgresoUsuario') id_ProgresoUsuario: number) {
+        return this.progresoUsuarioUseCase.obtenerProgresoUsuarioPorID(id_ProgresoUsuario);
+    }
 
-  @Put(':id')
-  update(@Param('id') id: number, @Body() progresoUsuario: ProgresoUsuarioEntity): Promise<void> {
-    return this.progresoUsuarioService.update(id, progresoUsuario);
-  }
+    @Patch('/:id_ProgresoUsuario')
+    async actualizarProgresoUsuario(@Param('id_ProgresoUsuario') id_ProgresoUsuario: number, @Body() progresoUsuario: ActualizarProgresoUsuarioDto) {
+        return this.progresoUsuarioUseCase.actualizarProgresoUsuario(id_ProgresoUsuario, progresoUsuario);
+    }
 
-  @Delete(':id')
-  remove(@Param('id') id: number): Promise<void> {
-    return this.progresoUsuarioService.remove(id);
-  }
+    @Delete('/:id_ProgresoUsuario')
+    async eliminarProgresoUsuario(@Param('id_ProgresoUsuario') id_ProgresoUsuario: number) {
+        return this.progresoUsuarioUseCase.eliminarProgresoUsuario(id_ProgresoUsuario);
+    }
 }

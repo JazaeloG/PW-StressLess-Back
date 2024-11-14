@@ -1,32 +1,30 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { TestResultadoRepository } from '../../infraestructure/repositories/test-resultado.repository';
-import { TestResultadoEntity } from '../../infraestructure/database/test-resultado.entity.schema';
+import { Injectable } from "@nestjs/common";
+import { TestResultadoUseCase } from "src/core/use-cases/test-resultado.use-case";
+import { TestResultadoInterface } from "src/shared/interfaces/test-resultado.interface";
 
 @Injectable()
 export class TestResultadoService {
-  constructor(
-    @InjectRepository(TestResultadoRepository)
-    private readonly testResultadoRepository: TestResultadoRepository,
-  ) {}
 
-  async create(testResultado: TestResultadoEntity): Promise<TestResultadoEntity> {
-    return this.testResultadoRepository.save(testResultado);
-  }
+    constructor(private readonly testResultadoUseCase: TestResultadoUseCase) {}
 
-  async findAll(): Promise<TestResultadoEntity[]> {
-    return this.testResultadoRepository.find();
-  }
+    async crearTestResultado(testResultado) {
+        return this.testResultadoUseCase.crearTestResultado(testResultado);
+    }
 
-  async findOne(id: number): Promise<TestResultadoEntity> {
-    return this.testResultadoRepository.findOne({ where: { id_TestResultado: id } });
-  }
+    async obtenerTestResultados() {
+        return this.testResultadoUseCase.obtenerTestResultados();
+    }
 
-  async update(id: number, testResultado: TestResultadoEntity): Promise<void> {
-    await this.testResultadoRepository.update(id, testResultado);
-  }
+    async obtenerTestResultadoPorID(id_TestResultado: number) {
+        return this.testResultadoUseCase.obtenerTestResultadoPorID(id_TestResultado);
+    }
 
-  async remove(id: number): Promise<void> {
-    await this.testResultadoRepository.delete(id);
-  }
+    async actualizarTestResultado(id_TestResultado: number, testResultado) {
+        return this.testResultadoUseCase.actualizarTestResultado(id_TestResultado, testResultado);
+    }
+
+    async eliminarTestResultado(id_TestResultado: number) {
+        return this.testResultadoUseCase.eliminarTestResultado(id_TestResultado);
+    }
+
 }

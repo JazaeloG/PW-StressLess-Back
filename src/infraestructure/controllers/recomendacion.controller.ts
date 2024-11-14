@@ -1,33 +1,35 @@
-import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
-import { RecomendacionService } from '../../app/services/recomendacion.service';
-import { RecomendacionEntity } from '../../infraestructure/database/recomendacion.entity.schema';
+import { Controller, Post, Body, Get, Delete, Param, Patch } from "@nestjs/common";
+import { RecomendacionService } from "../../app/services/recomendacion.service";
+import { CrearRecomendacionDto } from "src/app/dtos/recomendacion/crear-recomendacion.dto";
+import { ActualizarRecomendacionDto } from "src/app/dtos/recomendacion/actualizar-recomendacion.dto";
 
 @Controller('recomendacion')
 export class RecomendacionController {
-  constructor(private readonly recomendacionService: RecomendacionService) {}
+    
+    constructor(private readonly recomendacionService: RecomendacionService) {}
 
-  @Post()
-  create(@Body() recomendacion: RecomendacionEntity): Promise<RecomendacionEntity> {
-    return this.recomendacionService.create(recomendacion);
-  }
+    @Post()
+    async crearRecomendacion(@Body() recomendacion: CrearRecomendacionDto) {
+        return this.recomendacionService.crearRecomendacion(recomendacion);
+    }
 
-  @Get()
-  findAll(): Promise<RecomendacionEntity[]> {
-    return this.recomendacionService.findAll();
-  }
+    @Get()
+    async obtenerRecomendaciones() {
+        return this.recomendacionService.obtenerRecomendaciones();
+    }
 
-  @Get(':id')
-  findOne(@Param('id') id: number): Promise<RecomendacionEntity> {
-    return this.recomendacionService.findOne(id);
-  }
+    @Get('/:id')
+    async obtenerRecomendacionPorID(@Param('id') id: number) {
+        return this.recomendacionService.obtenerRecomendacionPorID(id);
+    }
 
-  @Put(':id')
-  update(@Param('id') id: number, @Body() recomendacion: RecomendacionEntity): Promise<void> {
-    return this.recomendacionService.update(id, recomendacion);
-  }
+    @Patch('/:id')
+    async actualizarRecomendacion(@Param('id') id: number, @Body() recomendacion: ActualizarRecomendacionDto) {
+        return this.recomendacionService.actualizarRecomendacion(id, recomendacion);
+    }
 
-  @Delete(':id')
-  remove(@Param('id') id: number): Promise<void> {
-    return this.recomendacionService.remove(id);
-  }
+    @Delete('/:id')
+    async eliminarRecomendacion(@Param('id') id: number) {
+        return this.recomendacionService.eliminarRecomendacion(id);
+    }
 }
