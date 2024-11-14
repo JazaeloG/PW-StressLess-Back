@@ -10,6 +10,13 @@ export class CrearTestResultadoDto {
   testId: number;
 
   @IsNotEmpty()
+  @IsNumber()
+  testResultado_Puntaje: number;
+
+  @IsNotEmpty()
   @IsString()
-  resultado: string;
+  testResultado_Comentarios: string;
+
+  @IsNotEmpty()
+  testResultado_Fecha: Date;
 }

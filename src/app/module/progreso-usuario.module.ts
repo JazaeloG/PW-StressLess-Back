@@ -4,17 +4,19 @@ import { ProgresoUsuarioController } from 'src/infraestructure/controllers/progr
 import { ProgresoUsuarioService } from 'src/app/services/progreso-usuario.service';
 import { ProgresoUsuarioRepositoryImpl } from 'src/infraestructure/repositories/progreso-usuario.repository';
 import { ProgresoUsuarioEntity } from 'src/infraestructure/database/progreso-usuario.entity.schema';
+import { ProgresoUsuarioUseCase } from 'src/core/use-cases/progreso-usuario.use-case';
 
 @Module({
   imports: [TypeOrmModule.forFeature([ProgresoUsuarioEntity])],
   controllers: [ProgresoUsuarioController],
   providers: [
     ProgresoUsuarioService,
+    ProgresoUsuarioUseCase,
     {
       provide: 'ProgresoUsuarioRepository',
       useClass: ProgresoUsuarioRepositoryImpl,
     },
   ],
-  exports: [ProgresoUsuarioService],
+  exports: [ProgresoUsuarioService, ProgresoUsuarioUseCase],
 })
 export class ProgresoUsuarioModule {}

@@ -4,7 +4,7 @@ import { CrearTestDto } from "src/app/dtos/test/crear-test.dto";
 import { ActualizarTestDto } from "src/app/dtos/test/actualizar-test.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
-import { Repository } from 'typeorm';
+import { Repository, DeepPartial } from 'typeorm';
 import { TestEntity } from "../database/test.entity.schema";
 
 @Injectable()
@@ -15,10 +15,18 @@ export class TestRepositoryImpl implements TestRepository {
         private readonly testRepository: Repository<TestEntity>,
     ) { }
 
-    async crearTest(test: CrearTestDto): Promise<Test> {
+    async crearTest(testDto: CrearTestDto): Promise<Test> {
         try {
-            const nuevoTest = this.testRepository.create(test);
-            return await this.testRepository.save(nuevoTest);
+            // Mapeo explícito del DTO a la entidad
+            const nuevoTest: DeepPartial<TestEntity> = {
+                test_Nombre: testDto.test_Nombre,
+                test_Descripcion: testDto.test_Descripcion,
+                test_FechaCreacion: testDto.test_FechaCreacion,
+            };
+
+            const testEntity = this.testRepository.create(nuevoTest);
+            const savedTest = await this.testRepository.save(testEntity);
+            return this.mapEntityToDomain(savedTest);
         } catch (error) {
             console.error('Error al guardar el nuevo test:', error);
             throw new HttpException('Error al crear el test', HttpStatus.INTERNAL_SERVER_ERROR);
@@ -26,27 +34,33 @@ export class TestRepositoryImpl implements TestRepository {
     }
 
     async obtenerTestPorID(testID: number): Promise<Test | null> {
-        const test = await this.testRepository.findOne({ where: { id_Test: testID } });
-        if (!test) {
+        const testEntity = await this.testRepository.findOne({ where: { id_Test: testID } });
+        if (!testEntity) {
             throw new HttpException('Test no encontrado', HttpStatus.NOT_FOUND);
         }
-        return test;
+        return this.mapEntityToDomain(testEntity);
     }
 
     async obtenerTests(): Promise<Test[]> {
-        return this.testRepository.find();
+        const testEntities = await this.testRepository.find();
+        return testEntities.map(entity => this.mapEntityToDomain(entity));
     }
 
-    async actualizarTest(testID: number, test: ActualizarTestDto): Promise<Test> {
+    async actualizarTest(testID: number, testDto: ActualizarTestDto): Promise<Test> {
         const testExistente = await this.testRepository.findOne({ where: { id_Test: testID } });
         if (!testExistente) {
             throw new HttpException('Test no encontrado', HttpStatus.NOT_FOUND);
         }
 
-        Object.assign(testExistente, test);
+        Object.assign(testExistente, {
+            test_Nombre: testDto.test_Nombre,
+            test_Descripcion: testDto.test_Descripcion,
+            test_FechaCreacion: testDto.test_FechaCreacion,
+        });
 
         try {
-            return await this.testRepository.save(testExistente);
+            const updatedTest = await this.testRepository.save(testExistente);
+            return this.mapEntityToDomain(updatedTest);
         } catch (error) {
             console.error('Error al actualizar el test:', error);
             throw new HttpException('Error al actualizar el test', HttpStatus.INTERNAL_SERVER_ERROR);
@@ -65,5 +79,15 @@ export class TestRepositoryImpl implements TestRepository {
             console.error('Error al eliminar el test:', error);
             throw new HttpException('Error al eliminar el test', HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    // Método de mapeo para convertir de entidad a dominio
+    private mapEntityToDomain(entity: TestEntity): Test {
+        return {
+            id_Test: entity.id_Test,
+            test_Nombre: entity.test_Nombre,
+            test_Descripcion: entity.test_Descripcion,
+            test_FechaCreacion: entity.test_FechaCreacion,
+        };
     }
 }

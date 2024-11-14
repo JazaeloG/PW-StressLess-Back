@@ -5,10 +5,10 @@ import { TypeOrmConfigModule } from './infraestructure/config/typeorm/getTypeORM
 import { UsuarioModule } from './app/module/usuario.module';
 import { AuthModule } from './app/module/auth.module';
 import { ProgresoUsuarioModule } from './app/module/progreso-usuario.module';
-import { RecomendacionModule } from './app/module/recomendacion.module';
 import { RecomendacionUsuarioModule } from './app/module/recomendacion-usuario.module';
 import { TestModule } from './app/module/test.module';
 import { TestResultadoModule } from './app/module/test-resultado.module';
+import { RecomendacionModule } from './app/module/recomendacion.module';
 
 @Module({
   imports: [
@@ -21,10 +21,11 @@ import { TestResultadoModule } from './app/module/test-resultado.module';
     UsuarioModule,
     AuthModule,
     RecomendacionModule,
-    RecomendacionUsuarioModule,
     TestModule,
     TestResultadoModule,
+    RecomendacionUsuarioModule,
     ProgresoUsuarioModule
+
   ],
 })
 export class AppModule {}

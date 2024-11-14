@@ -1,7 +1,14 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsOptional, IsString, IsNumber } from 'class-validator';
 
 export class ActualizarTestResultadoDto {
-  @IsNotEmpty()
+  @IsOptional()
+  @IsNumber()
+  testResultado_Puntaje?: number;
+
+  @IsOptional()
   @IsString()
-  resultado: string;
+  testResultado_Comentarios?: string;
+
+  @IsOptional()
+  testResultado_Fecha?: Date;
 }

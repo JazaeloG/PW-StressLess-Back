@@ -22,8 +22,14 @@ export class RecomendacionUsuarioRepositoryImpl {
 
   async crearRecomendacionUsuario(recomendacionUsuarioDto: CrearRecomendacionUsuarioDto): Promise<RecomendacionUsuario> {
     try {
+      // Convertir usuarioId a número
+      const usuarioId = Number(recomendacionUsuarioDto.usuarioId);
+      if (isNaN(usuarioId)) {
+        throw new HttpException('El usuarioId debe ser un número', HttpStatus.BAD_REQUEST);
+      }
+
       // Buscar la entidad UsuarioEntity por id
-      const usuario = await this.usuarioRepository.findOne(recomendacionUsuarioDto.usuarioId);
+      const usuario = await this.usuarioRepository.findOne({ where: { id_Usuario: usuarioId } });
       if (!usuario) {
         throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);
       }
@@ -67,8 +73,14 @@ export class RecomendacionUsuarioRepositoryImpl {
       throw new HttpException('Recomendación de usuario no encontrada', HttpStatus.NOT_FOUND);
     }
 
+    // Convertir usuarioId a número
+    const usuarioId = Number(recomendacionUsuarioDto.usuarioId);
+    if (isNaN(usuarioId)) {
+      throw new HttpException('El usuarioId debe ser un número', HttpStatus.BAD_REQUEST);
+    }
+
     // Buscar la entidad UsuarioEntity por id
-    const usuario = await this.usuarioRepository.findOne(recomendacionUsuarioDto.usuarioId);
+    const usuario = await this.usuarioRepository.findOne({ where: { id_Usuario: usuarioId } });
     if (!usuario) {
       throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);
     }

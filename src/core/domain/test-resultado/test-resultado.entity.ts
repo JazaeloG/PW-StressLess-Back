@@ -2,6 +2,7 @@ export class TestResultado {
     id_TestResultado: number;
     usuarioId: number;
     testId: number;
-    resultado: string;
-    fecha: Date;
+    testResultado_Puntaje: number;
+    testResultado_Comentarios: string;
+    testResultado_Fecha: Date;
 }
