@@ -3,6 +3,7 @@ import { CrearProgresoUsuarioDto } from "src/app/dtos/progreso/crear-progreso.dt
 import { ActualizarProgresoUsuarioDto } from "src/app/dtos/progreso/actualizar-progreso.dto";
 
 export interface ProgresoUsuarioRepository {
+    progresosUsuarioPorIDUsuario(id_Usuario: number): Promise<ProgresoUsuario[]>;
     crearProgresoUsuario(progresoUsuario: CrearProgresoUsuarioDto): Promise<ProgresoUsuario>;
     obtenerProgresoUsuarioPorID(progresoUsuarioID: number): Promise<ProgresoUsuario | null>;
     obtenerProgresoUsuarios(): Promise<ProgresoUsuario[]>;

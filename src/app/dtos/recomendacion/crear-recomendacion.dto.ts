@@ -15,10 +15,9 @@ export class CrearRecomendacionDto {
 
     @IsString({ message: MensajesSistema.CAMPO_STRING })
     @IsNotEmpty({ message: MensajesSistema.CAMPO_VACIO })
-    recomendacion_Fecha: string;
+    @MaxLength(500, { message: MensajesSistema.CAMPO_LIMITE_MAXIMO })
+    recomendacion_Detalles: string;
 
-    @IsString({ message: MensajesSistema.CAMPO_STRING })
     @IsNotEmpty({ message: MensajesSistema.CAMPO_VACIO })
-    @MaxLength(50, { message: MensajesSistema.CAMPO_LIMITE_MAXIMO })
-    recomendacion_Autor: string;
+    recomendacion_NivelRecomendacion: number;
 }

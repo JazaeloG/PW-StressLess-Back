@@ -11,6 +11,10 @@ export class RecomendacionUsuarioUseCase {
         private readonly recomendacionUsuarioRepository: RecomendacionUsuarioRepository,
     ) {}
 
+    async obtenerRecomendacionesUsuarioPorUsuarioID(usuarioID: number): Promise<RecomendacionUsuario[] | null> {
+        return this.recomendacionUsuarioRepository.obtenerRecomendacionesUsuarioPorUsuarioID(usuarioID);
+    }
+
     async crearRecomendacionUsuario(recomendacionUsuario: CrearRecomendacionUsuarioDto): Promise<RecomendacionUsuario> {
         return this.recomendacionUsuarioRepository.crearRecomendacionUsuario(recomendacionUsuario);
     }

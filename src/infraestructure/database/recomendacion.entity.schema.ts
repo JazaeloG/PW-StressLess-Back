@@ -7,10 +7,13 @@ export class RecomendacionEntity{
     id_Recomendacion: number;
     
     @Column({type: 'varchar', length: 50})
-    recomendacion_Nombre: string;
+    recomendacion_Titulo: string;
 
     @Column({type: 'varchar', length: 255})
     recomendacion_Descripcion: string;
+    
+    @Column({type: 'varchar', length: 255})
+    recomendacion_Detalles: string;
 
     @Column({type: 'int', nullable: false})
     recomendacion_NivelRecomendacion: number;
@@ -18,6 +21,7 @@ export class RecomendacionEntity{
     @Column({type: 'timestamp', default: () => 'CURRENT_TIMESTAMP'})
     recomendacion_FechaCreacion: Date;
 
-    @ManyToMany(() => RecomendacionUsuarioEntity, recomendacionUsuario => recomendacionUsuario.recomendaciones)
-    recomendaciones: RecomendacionUsuarioEntity[];
+    @ManyToMany(() => RecomendacionUsuarioEntity, (recomendacionUsuario) => recomendacionUsuario.recomendaciones)
+    recomendacionUsuarios: RecomendacionUsuarioEntity[];
+
 }

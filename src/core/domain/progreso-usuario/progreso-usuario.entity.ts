@@ -1,7 +1,9 @@
+import { UsuarioEntity } from "src/infraestructure/database/usuario.entity.schema";
+
 export class ProgresoUsuario {
-    id_Progreso: number;
-    usuarioId: number;
-    nivelEstresAntes: number;
-    nivelEstresNuevo: number;
-    fecha: Date;
+    id_ProgresoUsuario: number;
+    usuario: UsuarioEntity;
+    nivel_EstresAntes: number;
+    nivel_EstresNuevo: number;
+    progreso_Fecha: Date;
 }

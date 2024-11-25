@@ -13,6 +13,11 @@ export class RecomendacionUsuarioController {
         return this.recomendacionUsuarioService.crearRecomendacionUsuario(recomendacionUsuario);
     }
 
+    @Get('/:idUsuario')
+    async obtenerRecomendacionesUsuarioPorUsuarioID(@Param('idUsuario') idUsuario: number) {
+        return this.recomendacionUsuarioService.obtenerRecomendacionesUsuarioPorUsuarioID(idUsuario);
+    }
+
     @Get()
     async obtenerRecomendacionesUsuario() {
         return this.recomendacionUsuarioService.obtenerRecomendacionUsuarios();

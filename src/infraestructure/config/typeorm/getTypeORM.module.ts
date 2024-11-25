@@ -9,6 +9,7 @@ import { RecomendacionEntity } from "src/infraestructure/database/recomendacion.
 import { RecomendacionUsuarioEntity } from "src/infraestructure/database/recomendacion-usuario.entity.schema";
 import { TestEntity } from "src/infraestructure/database/test.entity.schema";
 import { TestResultadoEntity } from "src/infraestructure/database/test-resultado.entity.schema";
+import { PreguntaEntity } from "src/infraestructure/database/pregunta.entity.schema";
 
 export const getTypeOrmModuleOptions = (
     envConfigService: EnvironmentConfigService,
@@ -25,7 +26,8 @@ export const getTypeOrmModuleOptions = (
         RecomendacionEntity,
         RecomendacionUsuarioEntity,
         TestEntity,
-        TestResultadoEntity
+        TestResultadoEntity,
+        PreguntaEntity
     ],
     synchronize: true,
     extra: {

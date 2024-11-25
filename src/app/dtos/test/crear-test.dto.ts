@@ -1,4 +1,5 @@
-import { IsNotEmpty, IsString, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsString,IsArray } from 'class-validator';
+import { CrearPreguntaDto } from '../pregunta/crear-pregunta.dto';
 
 export class CrearTestDto {
   @IsNotEmpty()
@@ -9,6 +10,7 @@ export class CrearTestDto {
   @IsString()
   test_Descripcion: string;
 
-  @IsOptional() 
-  test_FechaCreacion?: Date;
+  @IsArray()
+  @IsNotEmpty()
+  preguntas: CrearPreguntaDto[];
 }

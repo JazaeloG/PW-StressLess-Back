@@ -3,6 +3,7 @@ import { CrearRecomendacionUsuarioDto } from "src/app/dtos/recomendacion-usuario
 import { ActualizarRecomendacionUsuarioDto } from "src/app/dtos/recomendacion-usuario/actualizar-recomendacion-usuario.dto";
 
 export interface RecomendacionUsuarioRepository {
+    obtenerRecomendacionesUsuarioPorUsuarioID(usuarioID: number): Promise<RecomendacionUsuario[] | null>;
     crearRecomendacionUsuario(recomendacionUsuario: CrearRecomendacionUsuarioDto): Promise<RecomendacionUsuario>;
     obtenerRecomendacionUsuarioPorID(recomendacionUsuarioID: number): Promise<RecomendacionUsuario | null>;
     obtenerRecomendacionUsuarios(): Promise<RecomendacionUsuario[]>;

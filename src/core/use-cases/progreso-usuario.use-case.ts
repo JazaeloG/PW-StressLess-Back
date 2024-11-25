@@ -11,6 +11,10 @@ export class ProgresoUsuarioUseCase {
         private readonly progresoUsuarioRepository: ProgresoUsuarioRepository,
     ) {}
 
+    async progresosUsuarioPorIDUsuario(id_Usuario: number): Promise<ProgresoUsuario[]> {
+        return this.progresoUsuarioRepository.progresosUsuarioPorIDUsuario(id_Usuario);
+    }
+
     async crearProgresoUsuario(progresoUsuario: CrearProgresoUsuarioDto): Promise<ProgresoUsuario> {
         return this.progresoUsuarioRepository.crearProgresoUsuario(progresoUsuario);
     }

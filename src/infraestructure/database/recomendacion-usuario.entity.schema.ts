@@ -1,4 +1,4 @@
-import { Entity, JoinColumn, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { UsuarioEntity } from "./usuario.entity.schema";
 import { RecomendacionEntity } from "./recomendacion.entity.schema";
 
@@ -11,6 +11,7 @@ export class RecomendacionUsuarioEntity {
   @JoinColumn({ name: 'id_Usuario' })
   usuario: UsuarioEntity;
 
-  @ManyToMany(() => RecomendacionEntity, recomendacion => recomendacion.recomendaciones, { eager: true })
+  @ManyToMany(() => RecomendacionEntity, (recomendacion) => recomendacion.recomendacionUsuarios)
+  @JoinTable() 
   recomendaciones: RecomendacionEntity[];
 }

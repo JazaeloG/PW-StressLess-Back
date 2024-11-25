@@ -5,9 +5,12 @@ import { TestUseCase } from 'src/core/use-cases/test.use-case';
 import { TestService } from 'src/app/services/test.service';
 import { TestRepositoryImpl } from 'src/infraestructure/repositories/test.repository';
 import { TestEntity } from 'src/infraestructure/database/test.entity.schema';
+import { PreguntaModule } from './pregunta.module';
+import { PreguntaEntity } from 'src/infraestructure/database/pregunta.entity.schema';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([TestEntity])],
+  imports: [TypeOrmModule.forFeature([TestEntity, PreguntaEntity]),
+  PreguntaModule],
   controllers: [TestController],
   providers: [
     TestService,

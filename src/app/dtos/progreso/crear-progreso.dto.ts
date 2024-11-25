@@ -1,8 +1,9 @@
-import { IsNotEmpty, IsNumber } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsPositive } from 'class-validator';
 
 export class CrearProgresoUsuarioDto {
   @IsNotEmpty()
   @IsNumber()
+  @IsPositive()
   usuarioId: number;
 
   @IsNotEmpty()
@@ -12,7 +13,4 @@ export class CrearProgresoUsuarioDto {
   @IsNotEmpty()
   @IsNumber()
   nivelEstresNuevo: number;
-
-  @IsNotEmpty()
-  fecha: Date;
 }

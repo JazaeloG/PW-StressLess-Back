@@ -1,21 +1,26 @@
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 import { TestResultadoEntity } from "./test-resultado.entity.schema";
+import { PreguntaEntity } from "./pregunta.entity.schema";
 
 @Entity('tests')
-export class TestEntity{
-
+export class TestEntity {
     @PrimaryGeneratedColumn()
     id_Test: number;
 
-    @Column({type: 'varchar', length: 50})
+    @Column({ type: 'varchar', length: 50 })
     test_Nombre: string;
 
-    @Column({type: 'varchar', length: 50})
+    @Column({ type: 'varchar', length: 50 })
     test_Descripcion: string;
 
-    @Column({type: 'timestamp', default: () => 'CURRENT_TIMESTAMP'})
+    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     test_FechaCreacion: Date;
 
-    @ManyToMany(() => TestResultadoEntity, TestResultado => TestResultado.test)
+    @ManyToMany(() => PreguntaEntity, (pregunta) => pregunta.tests)
+    @JoinTable({ name: "tests_preguntas" })
+    preguntas: PreguntaEntity[];
+
+    @ManyToMany(() => TestResultadoEntity, (testResultado) => testResultado.test)
+    @JoinTable({ name: "tests_test_resultados" })
     testResultados: TestResultadoEntity[];
 }

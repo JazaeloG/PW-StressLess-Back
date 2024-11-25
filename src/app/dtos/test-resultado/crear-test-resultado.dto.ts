@@ -16,7 +16,4 @@ export class CrearTestResultadoDto {
   @IsNotEmpty()
   @IsString()
   testResultado_Comentarios: string;
-
-  @IsNotEmpty()
-  testResultado_Fecha: Date;
 }

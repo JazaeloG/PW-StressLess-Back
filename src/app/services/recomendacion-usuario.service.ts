@@ -11,6 +11,10 @@ export class RecomendacionUsuarioService {
         return this.recomendacionUsuarioUseCase.crearRecomendacionUsuario(recomendacionUsuario);
     }
 
+    async obtenerRecomendacionesUsuarioPorUsuarioID(id_Usuario: number) {
+        return this.recomendacionUsuarioUseCase.obtenerRecomendacionesUsuarioPorUsuarioID(id_Usuario);
+    }
+
     async obtenerRecomendacionUsuarios() {
         return this.recomendacionUsuarioUseCase.obtenerRecomendacionUsuarios();
     }

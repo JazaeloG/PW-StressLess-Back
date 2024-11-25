@@ -5,9 +5,11 @@ import { ProgresoUsuarioService } from 'src/app/services/progreso-usuario.servic
 import { ProgresoUsuarioRepositoryImpl } from 'src/infraestructure/repositories/progreso-usuario.repository';
 import { ProgresoUsuarioEntity } from 'src/infraestructure/database/progreso-usuario.entity.schema';
 import { ProgresoUsuarioUseCase } from 'src/core/use-cases/progreso-usuario.use-case';
+import { UsuarioEntity } from 'src/infraestructure/database/usuario.entity.schema';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ProgresoUsuarioEntity])],
+  imports: [TypeOrmModule.forFeature([ProgresoUsuarioEntity, UsuarioEntity]),
+],
   controllers: [ProgresoUsuarioController],
   providers: [
     ProgresoUsuarioService,

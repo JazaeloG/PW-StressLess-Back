@@ -6,6 +6,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { Repository, DeepPartial } from 'typeorm';
 import { TestEntity } from "../database/test.entity.schema";
+import { PreguntaEntity } from "../database/pregunta.entity.schema";
 
 @Injectable()
 export class TestRepositoryImpl implements TestRepository {
@@ -13,37 +14,57 @@ export class TestRepositoryImpl implements TestRepository {
     constructor(
         @InjectRepository(TestEntity)
         private readonly testRepository: Repository<TestEntity>,
+
+        @InjectRepository(PreguntaEntity)
+        private readonly preguntaRepository: Repository<PreguntaEntity>,
     ) { }
 
     async crearTest(testDto: CrearTestDto): Promise<Test> {
         try {
-            // Mapeo explícito del DTO a la entidad
+            const preguntasEntities = await Promise.all(
+                testDto.preguntas.map(async (preguntaDto) => {
+                    const pregunta = this.preguntaRepository.create({
+                        pregunta_Texto: preguntaDto.pregunta_Texto,
+                    });
+                    return this.preguntaRepository.save(pregunta);
+                }),
+            );
+    
+            // Crear el test con las preguntas asociadas
             const nuevoTest: DeepPartial<TestEntity> = {
                 test_Nombre: testDto.test_Nombre,
                 test_Descripcion: testDto.test_Descripcion,
-                test_FechaCreacion: testDto.test_FechaCreacion,
+                preguntas: preguntasEntities, 
             };
-
+    
             const testEntity = this.testRepository.create(nuevoTest);
             const savedTest = await this.testRepository.save(testEntity);
+    
             return this.mapEntityToDomain(savedTest);
         } catch (error) {
-            console.error('Error al guardar el nuevo test:', error);
+            console.error('Error al crear el test:', error);
             throw new HttpException('Error al crear el test', HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     async obtenerTestPorID(testID: number): Promise<Test | null> {
-        const testEntity = await this.testRepository.findOne({ where: { id_Test: testID } });
+        const testEntity = await this.testRepository.findOne({
+            where: { id_Test: testID },
+            relations: ['preguntas'],
+        });
+    
         if (!testEntity) {
             throw new HttpException('Test no encontrado', HttpStatus.NOT_FOUND);
         }
-        return this.mapEntityToDomain(testEntity);
+    
+        return testEntity;
     }
 
     async obtenerTests(): Promise<Test[]> {
-        const testEntities = await this.testRepository.find();
-        return testEntities.map(entity => this.mapEntityToDomain(entity));
+        const testEntities = await this.testRepository.find({
+            relations: ['preguntas'],
+        });
+        return testEntities;
     }
 
     async actualizarTest(testID: number, testDto: ActualizarTestDto): Promise<Test> {

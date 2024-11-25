@@ -4,8 +4,9 @@ import { CrearProgresoUsuarioDto } from "src/app/dtos/progreso/crear-progreso.dt
 import { ActualizarProgresoUsuarioDto } from "src/app/dtos/progreso/actualizar-progreso.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
-import { Repository, DeepPartial } from 'typeorm';
+import { Repository, DeepPartial, In } from 'typeorm';
 import { ProgresoUsuarioEntity } from "../database/progreso-usuario.entity.schema";
+import { UsuarioEntity } from "../database/usuario.entity.schema";
 
 @Injectable()
 export class ProgresoUsuarioRepositoryImpl implements ProgresoUsuarioRepository {
@@ -13,20 +14,24 @@ export class ProgresoUsuarioRepositoryImpl implements ProgresoUsuarioRepository 
     constructor(
         @InjectRepository(ProgresoUsuarioEntity)
         private readonly progresoUsuarioRepository: Repository<ProgresoUsuarioEntity>,
+
+        @InjectRepository(UsuarioEntity)
+        private readonly usuarioRepository: Repository<UsuarioEntity>,
     ) {}
 
     async crearProgresoUsuario(progresoUsuario: CrearProgresoUsuarioDto): Promise<ProgresoUsuario> {
         try {
-            // Convertir DTO en tipo compatible con TypeORM usando DeepPartial
-            const nuevoProgresoUsuario: DeepPartial<ProgresoUsuarioEntity> = {
-                usuario: { id_Usuario: progresoUsuario.usuarioId },
+
+            const usuario = await this.usuarioRepository.findOne({ where: { id_Usuario: progresoUsuario.usuarioId } });
+            const nuevoProgresoUsuario = {
+                usuario: usuario,
                 nivel_EstresAntes: progresoUsuario.nivelEstresAntes,
                 nivel_EstresNuevo: progresoUsuario.nivelEstresNuevo,
-                progreso_Fecha: progresoUsuario.fecha,
+                progreso_Fecha: new Date(),
             };
             const progresoEntity = this.progresoUsuarioRepository.create(nuevoProgresoUsuario);
             const savedProgresoUsuario = await this.progresoUsuarioRepository.save(progresoEntity);
-            return this.mapEntityToDomain(savedProgresoUsuario);
+            return savedProgresoUsuario;
         } catch (error) {
             console.error('Error al guardar el nuevo progreso de usuario:', error);
             throw new HttpException('Error al crear el progreso de usuario', HttpStatus.INTERNAL_SERVER_ERROR);
@@ -38,12 +43,14 @@ export class ProgresoUsuarioRepositoryImpl implements ProgresoUsuarioRepository 
         if (!progresoUsuario) {
             throw new HttpException('Progreso de usuario no encontrado', HttpStatus.NOT_FOUND);
         }
-        return this.mapEntityToDomain(progresoUsuario);
+        return progresoUsuario;
     }
 
     async obtenerProgresoUsuarios(): Promise<ProgresoUsuario[]> {
-        const progresosUsuarioEntities = await this.progresoUsuarioRepository.find();
-        return progresosUsuarioEntities.map(entity => this.mapEntityToDomain(entity));
+        const progresosUsuarioEntities = await this.progresoUsuarioRepository.find({
+            relations: ['usuario'],
+        });
+        return progresosUsuarioEntities;
     }
 
     async actualizarProgresoUsuario(progresoUsuarioID: number, progresoUsuario: ActualizarProgresoUsuarioDto): Promise<ProgresoUsuario> {
@@ -56,11 +63,16 @@ export class ProgresoUsuarioRepositoryImpl implements ProgresoUsuarioRepository 
 
         try {
             const updatedProgresoUsuario = await this.progresoUsuarioRepository.save(progresoUsuarioExistente);
-            return this.mapEntityToDomain(updatedProgresoUsuario);
+            return updatedProgresoUsuario;
         } catch (error) {
             console.error('Error al actualizar el progreso de usuario:', error);
             throw new HttpException('Error al actualizar el progreso de usuario', HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    async progresosUsuarioPorIDUsuario(usuarioID: number): Promise<ProgresoUsuario[]> {
+        const progresosUsuario = await this.progresoUsuarioRepository.find({ where: { usuario: { id_Usuario: usuarioID } } });
+        return progresosUsuario;
     }
 
     async eliminarProgresoUsuario(progresoUsuarioID: number): Promise<void> {
@@ -77,14 +89,4 @@ export class ProgresoUsuarioRepositoryImpl implements ProgresoUsuarioRepository 
         }
     }
 
-    // Método de mapeo para convertir de entidad a dominio
-    private mapEntityToDomain(entity: ProgresoUsuarioEntity): ProgresoUsuario {
-        return {
-            id_Progreso: entity.id_ProgresoUsuario,
-            usuarioId: entity.usuario.id_Usuario,
-            nivelEstresAntes: entity.nivel_EstresAntes,
-            nivelEstresNuevo: entity.nivel_EstresNuevo,
-            fecha: entity.progreso_Fecha,
-        };
-    }
 }
