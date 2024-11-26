@@ -7,10 +7,10 @@ export class TestEntity {
     @PrimaryGeneratedColumn()
     id_Test: number;
 
-    @Column({ type: 'varchar', length: 50 })
+    @Column({ type: 'varchar', length: 255 , nullable: true})
     test_Nombre: string;
 
-    @Column({ type: 'varchar', length: 50 })
+    @Column({ type: 'varchar', length: 255 , nullable: true})
     test_Descripcion: string;
 
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
