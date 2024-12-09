@@ -15,4 +15,8 @@ export class AuthUseCase{
     async login(usuario: any): Promise<any>{
         return this.authRepository.login(usuario);
     }
+
+    async obtenerPerfil(token: string): Promise<any>{
+        return this.authRepository.obtenerPorToken(token);
+    }
 }

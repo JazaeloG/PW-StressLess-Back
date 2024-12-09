@@ -52,4 +52,23 @@ export class AuthRepositoryImpl implements AuthRepository{
     async validarContrasena(contrasena: string, hash: string): Promise<boolean> {
         return await bcrypt.compare(contrasena, hash);
     }
+
+
+    async obtenerPorToken(token: string): Promise<any> {
+        try{
+            const payloadVerificado = this.jwtService.verify(token);
+            const cuenta = await this.usuarioUseCase.obtenerUsuarioPorID(payloadVerificado.id);
+
+            if(!cuenta){
+                throw new HttpException('Cuenta no encontrada', HttpStatus.NOT_FOUND);
+            }
+
+            return cuenta;
+        }catch(error){
+            throw new HttpException('Token invalido', HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    
+        
 }

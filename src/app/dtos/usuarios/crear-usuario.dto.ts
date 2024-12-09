@@ -23,9 +23,8 @@ export class CrearUsuarioDto {
     @IsNotEmpty({ message: MensajesSistema.CAMPO_VACIO })
     usuario_Sexo: SexoEnum;
 
-    @IsString({ message: MensajesSistema.CAMPO_STRING })
     @IsNotEmpty({ message: MensajesSistema.CAMPO_VACIO })
-    usuario_FechaNacimiento: string;
+    usuario_Edad: number;
 
     @IsString({ message: MensajesSistema.CAMPO_STRING })
     @IsNotEmpty({ message: MensajesSistema.CAMPO_VACIO })

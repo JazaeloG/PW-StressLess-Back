@@ -21,8 +21,8 @@ export class UsuarioEntity{
     @Column({type: 'enum', enum: SexoEnum, default: SexoEnum.OTRO})
     usuario_Sexo: SexoEnum;
 
-    @Column({type: 'date', nullable: false})
-    usuario_FechaNacimiento: string;
+    @Column({type: 'int', nullable: true})
+    usuario_Edad: number;
 
     @Column({type: 'varchar', length: 255})
     usuario_Password: string;
