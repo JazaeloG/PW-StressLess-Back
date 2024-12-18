@@ -13,7 +13,7 @@ export class ProgresoUsuarioController {
         return this.progresoUsuarioUseCase.crearProgresoUsuario(progresoUsuario);
     }
 
-    @Get('/:id_Usuario')
+    @Get('porUsuarioID/:id_Usuario')
     async obtenerProgresosUsuarioPorUsuario(@Param('id_Usuario') id_Usuario: number) {
         return this.progresoUsuarioUseCase.progresosUsuarioPorIDUsuario(id_Usuario);
     }

@@ -30,10 +30,9 @@ export const getTypeOrmModuleOptions = (
         PreguntaEntity
     ],
     synchronize: true,
-    extra: {
-        ssl: false,
-        sslmode: 'require',
-    } as TypeOrmModuleOptions,
+    ssl: {
+        rejectUnauthorized: false,
+    }
 });
 
 @Module({
